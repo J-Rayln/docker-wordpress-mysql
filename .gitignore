@@ -1,0 +1,21 @@
+# those annoying OS created files ... and node_modules
+# .........................................................
+.DS_Store
+node_modules
+
+# notes, design files, scratchpads, snippets, etc...
+# .........................................................
+notes.md
+.scratchpads
+.templates
+.design_files
+
+# WordPress plugins directory
+# .........................................................
+src/plugins/*
+!src/plugins/index.php
+
+# WordPress themes directory
+# .........................................................
+src/themes/*
+!src/themes/index.php

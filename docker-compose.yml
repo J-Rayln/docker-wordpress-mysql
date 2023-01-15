@@ -1,0 +1,54 @@
+version: '3.6'
+
+services:
+
+  wordpress:
+    depends_on:
+      - mysql
+    image: wordpress:latest
+    container_name: ${APP_NAME}-wordpress
+    ports: 
+      - 80:80
+    restart: always
+    volumes:
+      - ./src/plugins:/var/www/html/wp-content/plugins
+      - ./src/themes:/var/www/html/wp-content/themes
+      - wordpress:/var/www/html
+    environment:
+      WORDPRESS_DB_HOST: ${DB_HOST}
+      WORDPRESS_DB_NAME: ${DB_NAME}
+      WORDPRESS_DB_USER: ${DB_USER}
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
+      WORDPRESS_TABLE_PREFIX: ${WP_TABLE_PREFIX}
+      WORDPRESS_DEBUG: ${WP_DEBUG}
+
+  mysql:
+    platform: linux/x86_64
+    image: mysql:5.7
+    container_name: ${APP_NAME}-mysql
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: ${APP_NAME}-phpmyadmin
+    links:
+      - mysql:mysql
+    environment:
+      PMA_HOST: ${DB_HOST}
+      PMA_USER: ${DB_USER}
+      PMA_PASSWORD: ${DB_PASSWORD}
+      PMA_PORT: 3306
+    restart: always
+    ports:
+      - 8081:80
+
+volumes:
+  db_data:
+  wordpress:
